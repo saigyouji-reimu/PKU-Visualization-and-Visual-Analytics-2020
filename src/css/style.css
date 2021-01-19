@@ -33,7 +33,7 @@
 #xname {
     position:absolute;
     left:10px;
-    top:130px;
+    top:180px;
     font-size: 12px;
 }
 
@@ -41,14 +41,14 @@
 {
     position:absolute;
     left:10px;
-    top:190px;
+    top:210px;
     font-size: 12px;
 }
 
 #yname {
     position:absolute;
     left:10px;
-    top:170px;
+    top:240px;
     font-size: 12px;
 }
 
@@ -56,14 +56,14 @@
 {
     position:absolute;
     left:10px;
-    top:230px;
+    top:270px;
     font-size: 12px;
 }
 
 #tname {
     position:absolute;
     left:10px;
-    top:210px;
+    top:300px;
     font-size: 12px;
 }
 
@@ -79,26 +79,26 @@ html,body {
 }
 
 #container {
-    width: 800px; 
-    height: 600px;  
+    width: 1200px; 
+    height: 800px;  
     background-color: rgba(240, 240, 240, 0.9);
     overflow: hidden;
     border: 1px solid #ccc;
     float: left;
-    left 50px:
-    top 50px
+    left: 0px;
+    top: 50px;
     position: absolute;  
 }
 
 #container3 {
     width: 600px; 
-    height: 600px;  
+    height: 800px;  
     background-color: rgba(240, 240, 240, 0.9);
     overflow: hidden;
     border: 1px solid #ccc;
     float: left;
-    left 850px:
-    top 50px
+    left: 1200px;
+    top: 50px;
     position: absolute; 
 }
 
