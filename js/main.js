@@ -4,7 +4,6 @@ let height = 600; // 0.96
 let x_attr = 'FGA ';
 let y_attr = 'FG% ';
 let year = '2015';
-let data_1 = './data/data01.json';
 let fontFamily;
 
 function set_ui() {
@@ -59,7 +58,7 @@ function changeX(val) {
     draw_main();
 }
 
-//µ±ÓÃÏÂÀ­±íµ¥¸Ä±äyÖáÊ±·¢ÉúµÄĞĞÎª
+//å½“ç”¨ä¸‹æ‹‰è¡¨å•æ”¹å˜yè½´æ—¶å‘ç”Ÿçš„è¡Œä¸º
 function changeY(val) {
     y_attr = val;
     d3.select('svg').remove();
@@ -228,7 +227,7 @@ function draw_main() {
 function radar(a1, a2, a3, a4, a5, a6) {
    
     var width1 = 300, height1 = 300;
-    // ´´½¨Ò»¸ö·Ö×éÓÃÀ´×éºÏÒª»­µÄÍ¼±íÔªËØ
+    // åˆ›å»ºä¸€ä¸ªåˆ†ç»„ç”¨æ¥ç»„åˆè¦ç”»çš„å›¾è¡¨å…ƒç´ 
     let main1 = d3.select('#container3')
         .select('svg')
         .attr('width', width1)
@@ -242,17 +241,17 @@ function radar(a1, a2, a3, a4, a5, a6) {
         ]
     };
     var radius = 100,
-        // Ö¸±êµÄ¸öÊı£¬¼´fieldNamesµÄ³¤¶È
+        // æŒ‡æ ‡çš„ä¸ªæ•°ï¼Œå³fieldNamesçš„é•¿åº¦
         total = 6,
-        // ĞèÒª½«ÍøÖá·Ö³É¼¸¼¶£¬¼´ÍøÖáÉÏ´ÓĞ¡µ½´óÓĞ¶àÉÙ¸öÕı¶à±ßĞÎ
+        // éœ€è¦å°†ç½‘è½´åˆ†æˆå‡ çº§ï¼Œå³ç½‘è½´ä¸Šä»å°åˆ°å¤§æœ‰å¤šå°‘ä¸ªæ­£å¤šè¾¹å½¢
         level = 5,
-        // ÍøÖáµÄ·¶Î§£¬ÀàËÆ×ø±êÖá
+        // ç½‘è½´çš„èŒƒå›´ï¼Œç±»ä¼¼åæ ‡è½´
         rangeMin = 0,
         rangeMax = 1,
         arc = 2 * Math.PI;
-    // Ã¿ÏîÖ¸±êËùÔÚµÄ½Ç¶È
+    // æ¯é¡¹æŒ‡æ ‡æ‰€åœ¨çš„è§’åº¦
     var onePiece = arc / total;
-    // ¼ÆËãÍøÖáµÄÕı¶à±ßĞÎµÄ×ø±ê
+    // è®¡ç®—ç½‘è½´çš„æ­£å¤šè¾¹å½¢çš„åæ ‡
     var polygons = {
         webs: [],
         webPoints: []
@@ -273,7 +272,7 @@ function radar(a1, a2, a3, a4, a5, a6) {
         polygons.webs.push(webs);
         polygons.webPoints.push(webPoints);
     }
-    // »æÖÆÍøÖá
+    // ç»˜åˆ¶ç½‘è½´
     var webs = main1.append('g')
         .classed('webs', true);
     webs.selectAll('polygon')
@@ -286,7 +285,7 @@ function radar(a1, a2, a3, a4, a5, a6) {
         .style("fill-opacity", 0.5)
         .style("stroke", 'gray')
         .style("stroke - dasharray", 10, 5);
-    // Ìí¼Ó×İÖá
+    // æ·»åŠ çºµè½´
     var lines = main1.append('g')
         .classed('lines', true);
     lines.selectAll('line')
@@ -303,7 +302,7 @@ function radar(a1, a2, a3, a4, a5, a6) {
         })
         .style("stroke", 'black');
 
-    // ¼ÆËãÀ×´ïÍ¼±íµÄ×ø±ê
+    // è®¡ç®—é›·è¾¾å›¾è¡¨çš„åæ ‡
     var areasData = [];
     var values = data1.values;
     for (var i = 0; i < values.length; i++) {
@@ -325,10 +324,10 @@ function radar(a1, a2, a3, a4, a5, a6) {
             points: points
         });
     }
-    // Ìí¼Óg·Ö×é°üº¬ËùÓĞÀ×´ïÍ¼ÇøÓò
+    // æ·»åŠ gåˆ†ç»„åŒ…å«æ‰€æœ‰é›·è¾¾å›¾åŒºåŸŸ
     var areas = main1.append('g')
         .classed('areas', true);
-    // Ìí¼Óg·Ö×éÓÃÀ´°üº¬Ò»¸öÀ×´ïÍ¼ÇøÓòÏÂµÄ¶à±ßĞÎÒÔ¼°Ô²µã 
+    // æ·»åŠ gåˆ†ç»„ç”¨æ¥åŒ…å«ä¸€ä¸ªé›·è¾¾å›¾åŒºåŸŸä¸‹çš„å¤šè¾¹å½¢ä»¥åŠåœ†ç‚¹ 
     areas.selectAll('g')
         .data(areasData)
         .enter()
@@ -337,10 +336,10 @@ function radar(a1, a2, a3, a4, a5, a6) {
             return 'area' + (i + 1);
         });
     for (var i = 0; i < areasData.length; i++) {
-        // ÒÀ´ÎÑ­»·Ã¿¸öÀ×´ïÍ¼ÇøÓò
+        // ä¾æ¬¡å¾ªç¯æ¯ä¸ªé›·è¾¾å›¾åŒºåŸŸ
         var area = areas.select('.area' + (i + 1)),
             areaData = areasData[i];
-        // »æÖÆÀ×´ïÍ¼ÇøÓòÏÂµÄ¶à±ßĞÎ
+        // ç»˜åˆ¶é›·è¾¾å›¾åŒºåŸŸä¸‹çš„å¤šè¾¹å½¢
         area.append('polygon')
             .attr('points', areaData.polygon)
             .attr('stroke', function (d, index) {
@@ -352,7 +351,7 @@ function radar(a1, a2, a3, a4, a5, a6) {
             .style("fill-opacity", 0.3)
             .style("stroke - width", 3);
 
-        // »æÖÆÀ×´ïÍ¼ÇøÓòÏÂµÄµã 
+        // ç»˜åˆ¶é›·è¾¾å›¾åŒºåŸŸä¸‹çš„ç‚¹ 
         var circles = area.append('g')
             .classed('circles', true);
         circles.selectAll('circle')
