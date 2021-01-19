@@ -29,7 +29,7 @@ SingleSpan.prototype.draw_line = function () {
     else {
         const y = this.height / 2;
         const llx = this.width * 0.1;
-        const lry = this.width * 0.9;
+        const lrx = this.width * 0.9;
         line_data = [
             { x : llx, y : y },
             { x : lrx, y : y },
@@ -72,10 +72,10 @@ SingleSpan.prototype.draw_circles = function () {
     else {
         const y = this.height / 2;
         const rad = this.height * 0.3;
-        let uy = this.width * 
+        let ux = this.width * 
         (0.1 + (0.8 * (this.start - this.minv)) / (this.maxv - this.minv));
         circ_Data = [
-            { x : x, y : uy, r : rad, tag : 1 },
+            { x : ux, y : y, r : rad, tag : 1 },
         ];
     }
     let circles;
