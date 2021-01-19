@@ -1,22 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NBA Data Visualization</title>
-  <link rel="stylesheet" href="/_dist_/index.css">
-</head>
-<body>
-  <noscript>You must enable JavaScript to view the page.</noscript>
-  <header>NBA Data Visualization</header>
-  <div id="tooltip"></div>
-  <div id="switcher"></div>
-  <div id="times"></div>
-  <div id="playerframe"></div>
-  <div id="teamframe">
-    <div id="team"></div>
-    <div id="detail"></div>
-  </div>
-  <script type="module" src="/_dist_/index.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NBA Data Visualization</title>
+    <link rel="stylesheet" href="/_dist_/css/index.css" />
+  </head>
+  <body>
+    <noscript>You must enable JavaScript to view the page.</noscript>
+    <header>NBA Data Visualization</header>
+    <div id="tooltip"></div>
+    <div id="panel">
+      <div class="ctrl">
+        <div>
+          <p class="label">
+            Range Selected: <span id="range">[1950, 2020]</span>
+          </p>
+          <svg id="times" height="24"></svg>
+        </div>
+        <div><svg id="switcher"></svg></div>
+      </div>
+      <div class="frame">
+        <div id="playerframe">
+          <div><svg id="player"></svg></div>
+        </div>
+        <div id="teamframe">
+          <div><svg id="team"></svg></div>
+          <div><svg id="detail"></svg></div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/_dist_/index.js"></script>
+  </body>
 </html>
