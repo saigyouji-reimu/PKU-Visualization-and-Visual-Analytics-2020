@@ -1,0 +1,143 @@
+@font-face {
+    font-family: 'Khand-Regular';
+    src: url('./font/Khand-Regular.ttf');
+}
+@font-face {
+    font-family: 'KAITI';
+    src: url(./font/KAITI.ttf);
+}
+@font-face {
+    font-family: 'PingFangSC-Regular';
+    src: url(./font/PingFang-SC-Regular.ttf);
+}
+
+@media only screen and (min-width: 1080px) {
+    html {
+        font-size: 15px !important;
+    }
+}
+@media only screen and (min-width: 1440px) {
+    html {
+        font-size: 25px !important;
+    }
+}
+
+#xItem
+{
+    position:absolute;
+    left:10px;
+    top:150px;
+    font-size: 12px;
+}
+
+#xname {
+    position:absolute;
+    left:10px;
+    top:130px;
+    font-size: 12px;
+}
+
+#yItem
+{
+    position:absolute;
+    left:10px;
+    top:190px;
+    font-size: 12px;
+}
+
+#yname {
+    position:absolute;
+    left:10px;
+    top:170px;
+    font-size: 12px;
+}
+
+#tItem
+{
+    position:absolute;
+    left:10px;
+    top:230px;
+    font-size: 12px;
+}
+
+#tname {
+    position:absolute;
+    left:10px;
+    top:210px;
+    font-size: 12px;
+}
+
+
+
+
+
+html,body {
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+    overflow: hidden;
+}
+
+#container {
+    width: 800px; 
+    height: 600px;  
+    background-color: rgba(240, 240, 240, 0.9);
+    overflow: hidden;
+    border: 1px solid #ccc;
+    float: left;
+    left 50px:
+    top 50px
+    position: absolute;  
+}
+
+#container3 {
+    width: 600px; 
+    height: 600px;  
+    background-color: rgba(240, 240, 240, 0.9);
+    overflow: hidden;
+    border: 1px solid #ccc;
+    float: left;
+    left 850px:
+    top 50px
+    position: absolute; 
+}
+
+.title {
+    font-size: 1.5rem;
+    text-anchor: middle;
+}
+
+.axis_label {
+    font-size: 1rem;
+    text-anchor: middle;
+}
+
+.point {
+    fill: #1f77b4;
+}
+
+#tooltip{
+    position: absolute;           
+    text-align: center;
+    background-color: rgba(250, 250, 250, 1);
+    border: 1px solid rgb(200,200,200);
+    border-radius:5px;
+    font-size:0.8rem;
+    width: 15rem;;
+    padding:4px;
+    color:black;
+    z-index: 3;
+    visibility: hidden;
+    opacity: 0.8;
+}
+
+.domain {
+    stroke: rgb(80,80,80);
+    stroke-linecap: round;
+    stroke-width: 0.13rem;
+}
+
+.tick line {
+    stroke: rgb(80,80,80);
+    stroke-linecap: round;
+}
