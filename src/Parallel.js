@@ -30,11 +30,16 @@ let team = new Array();
 let Scale = new Array();
 let Axis = new Array();
 let svg;
+let L;
 
 let LineGraph = new Array();
 let RectGraph = new Array();
 let TextGraph = new Array();
+let LineData = new Array();
+let Linedata = new Array();
 let block = new Array();
+let ave_d = new Array(), ori_d = new Array();
+let A;
 
 let dur = 1000;
 
@@ -42,6 +47,68 @@ function Parallel(selector){
     this.selector = selector;
     [width, height] = getActualDim(selector);
     svg = d3.select(selector);
+}
+
+
+let Text;
+function show_up(i){
+    let d = team[i];
+    Text = svg.append('text')
+        .text(d)
+        .attr("transform", "translate(" + LineData[L - 1].x + "," + LineData[L - 1].y + ")");
+
+    LineGraph[i].attr('opacity', 0.9)
+        .attr("stroke-width", 9);
+
+    let content = '<table><tr><td>' + d + '</td></tr>';
+    show_attr.forEach((dd, j) => {
+        content = content + '<tr><td>' + dd + '</td><td>' + ave_d[i][dd] + '</td></tr>';
+    });
+    content = content + '</table>';
+
+    // tooltip
+    let tooltip = d3.select('#tooltip');            
+    tooltip.html(content)
+        .style('left', width*0.91 + 'px')
+        .style('top', height*0.15 + 'px')
+        //.transition().duration(500)
+        .style('visibility', 'visible');
+}
+
+function show_down(i){
+    if(Text != null)Text.remove();
+    LineGraph[i].attr('opacity', 0.2)
+        .attr("stroke-width", 4);  
+    let tooltip = d3.select('#tooltip');
+    tooltip.style('visibility', 'hidden');
+}
+
+function set_function(i){
+    LineGraph[i].on('mouseover', (e, _d) => {
+        show_up(i);
+    })
+    .on('mouseout', (e, d) => {
+        show_down(i);
+    })
+
+    block[i].on('mouseover', (e, _d) => {
+        RectGraph.forEach((d, j) => {
+            if(A[j] == A[i]){
+                RectGraph[j].attr("stroke-width", 2);
+                LineGraph[j].attr('opacity', 0.5)
+                    .attr("stroke-width", 6);
+            }
+        })
+        show_up(i);
+    })
+    .on('mouseout', (e, d) => {
+        show_down(i);
+        RectGraph.forEach((d, j) => {
+            RectGraph[j].attr("stroke-width", 0);
+            LineGraph[j].attr('opacity', 0.2)
+                .attr("stroke-width", 4);  
+        })
+    })
 }
 
 Parallel.prototype.draw = function(data, years, attr){
@@ -54,7 +121,7 @@ Parallel.prototype.draw = function(data, years, attr){
     });
     data = data.filter((d, i) => (years.includes(d["Season"])));
 
-    let ave_d = new Array(), ori_d = new Array();
+    ave_d = new Array(), ori_d = new Array();
     team = get_team(data);
     team.forEach((d, i) => {
         ave_d[i] = {};
@@ -70,9 +137,9 @@ Parallel.prototype.draw = function(data, years, attr){
         });
     });
 
-    let A = kmeans(ori_d, 7, 'team');
+    A = kmeans(ori_d, 7, 'team');
     
-    let L = attr.length;
+    L = attr.length;
     let delta = width * 0.8 / L;
     let left = width * 0.04;
     let Left = width * 0.05;
@@ -117,45 +184,14 @@ Parallel.prototype.draw = function(data, years, attr){
     });
 
     team.forEach((d, i) => {
-        let Linedata = new Array();
-        let LineData = new Array();
+        Linedata = new Array();
+        LineData = new Array();
         
         attr.forEach((a, j) => {
             Linedata[j] = {"x": (Left), "y": (dheight) + Scale[j](ave_d[i][a])};
             LineData[j] = {"x": (Left + delta * j), "y": (dheight) + Scale[j](ave_d[i][a])};
         })
 
-        let Text;
-        function show_up(){
-            Text = svg.append('text')
-                .text(d)
-                .attr("transform", "translate(" + LineData[L - 1].x + "," + LineData[L - 1].y + ")");
-
-            LineGraph[i].attr('opacity', 0.9)
-                .attr("stroke-width", 9);
-        
-            let content = '<table><tr><td>' + d + '</td></tr>';
-            show_attr.forEach((dd, i) => {
-                content = content + '<tr><td>' + dd + '</td><td>' + ave_d[i][dd] + '</td></tr>';
-            });
-            content = content + '</table>';
-
-            // tooltip
-            let tooltip = d3.select('#tooltip');            
-            tooltip.html(content)
-                .style('left', width*0.91 + 'px')
-                .style('top', height*0.15 + 'px')
-                //.transition().duration(500)
-                .style('visibility', 'visible');
-        }
-
-        function show_down(){
-            Text.remove();
-            LineGraph[i].attr('opacity', 0.2)
-                .attr("stroke-width", 4);  
-            let tooltip = d3.select('#tooltip');
-            tooltip.style('visibility', 'hidden');
-        }
 
         LineGraph[i] = svg.append("path")
             .attr("d", Line(Linedata))
@@ -164,38 +200,16 @@ Parallel.prototype.draw = function(data, years, attr){
             .attr('fill', 'none')
             .attr('opacity', 0.2)
             .attr('id', d)
-            .attr('class', A[i])
-            .on('mouseover', (e, _d) => {
-                show_up();
-            })
-            .on('mouseout', (e, d) => {
-                show_down();
-            });
+            .attr('class', A[i]);
         
         LineGraph[i].transition()
             .duration(dur)
             .attr("d", Line(LineData));
         
         block[i] = svg.append("g")
-            .attr("transform", "translate(" + (width * 0.83) + "," + dheight + ")")
-            .on('mouseover', (e, _d) => {
-                RectGraph.forEach((d, j) => {
-                    if(A[j] == A[i]){
-                        RectGraph[j].attr("stroke-width", 2);
-                        LineGraph[j].attr('opacity', 0.5)
-                            .attr("stroke-width", 6);
-                    }
-                })
-                show_up();
-            })
-            .on('mouseout', (e, d) => {
-                show_down();
-                RectGraph.forEach((d, j) => {
-                    RectGraph[j].attr("stroke-width", 0);
-                    LineGraph[j].attr('opacity', 0.2)
-                        .attr("stroke-width", 4);  
-                })
-            })
+            .attr("transform", "translate(" + (width * 0.83) + "," + dheight + ")");
+        
+        set_function(i);
         
         RectGraph[i] = block[i].append("rect")
             .attr("x", 0)
@@ -237,7 +251,7 @@ Parallel.prototype.change_years = function(data, years, attr){
         });
     });
 
-    let A = kmeans(ori_d, 7, 'team');
+    A = kmeans(ori_d, 7, 'team');
     
     let L = attr.length;
     let delta = width * 0.8 / L;
@@ -258,43 +272,8 @@ Parallel.prototype.change_years = function(data, years, attr){
         attr.forEach((a, j) => {
             LineData[j] = {"x": (Left + delta * j), "y": (dheight) + Scale[j](ave_d[i][a])};
         })
-        function show_up(){
-            Text = svg.append('text')
-                .text(d)
-                .attr("transform", "translate(" + LineData[L - 1].x + "," + LineData[L - 1].y + ")");
 
-            LineGraph[i].attr('opacity', 0.9)
-                .attr("stroke-width", 9);
-        
-            let content = '<table><tr><td>' + d + '</td></tr>';
-            show_attr.forEach((dd, i) => {
-                content = content + '<tr><td>' + dd + '</td><td>' + ave_d[i][dd] + '</td></tr>';
-            });
-            content = content + '</table>';
-
-            // tooltip
-            let tooltip = d3.select('#tooltip');            
-            tooltip.html(content)
-                .style('left', width*0.91 + 'px')
-                .style('top', height*0.15 + 'px')
-                //.transition().duration(500)
-                .style('visibility', 'visible');
-        }
-
-        function show_down(){
-            Text.remove();
-            LineGraph[i].attr('opacity', 0.2)
-                .attr("stroke-width", 4);  
-            let tooltip = d3.select('#tooltip');
-            tooltip.style('visibility', 'hidden');
-        }
-
-        LineGraph[i].on('mouseover', (e, _d) => {
-                show_up();
-            })
-            .on('mouseout', (e, d) => {
-                show_down();
-            })
+        LineGraph[i]
             .transition()
             .duration(dur)
             .attr("d", Line(LineData))
@@ -306,24 +285,7 @@ Parallel.prototype.change_years = function(data, years, attr){
             .duration(dur)
             .attr('fill', color[A[i]]);
 
-        block[i].on('mouseover', (e, _d) => {
-                RectGraph.forEach((d, j) => {
-                    if(A[j] == A[i]){
-                        RectGraph[j].attr("stroke-width", 2);
-                        LineGraph[j].attr('opacity', 0.5)
-                            .attr("stroke-width", 6);
-                    }
-                })
-                show_up();
-            })
-            .on('mouseout', (e, d) => {
-                show_down();
-                RectGraph.forEach((d, j) => {
-                    RectGraph[j].attr("stroke-width", 0);
-                    LineGraph[j].attr('opacity', 0.2)
-                        .attr("stroke-width", 4);  
-                })
-            })
+        set_function(i);
     });
     d3.select('text').text('flag');
 }
