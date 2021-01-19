@@ -102,7 +102,7 @@ TimeSpan.prototype.update_dom = function (id) {
 };
 
 TimeSpan.prototype.set_listener = function (updater) {
-  this.svg.selectAll("circle").call(
+    this.svg.selectAll("circle").call(
     d3
       .drag()
       .on("drag", (e, d) => {
