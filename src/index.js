@@ -67,7 +67,7 @@ function draw(data, years, attr){
     let delta = width * 0.8 / L;
     let left = width * 0.04;
     let Left = width * 0.05;
-    let dheight = height * 0.15;
+    let dheight = height * 0.1;
    // svg.remove();
     
     
@@ -192,11 +192,33 @@ function draw(data, years, attr){
                     LineGraph[j].attr('opacity', 0.2)
                         .attr("stroke-width", 6);  
                 })
+            })
+            .on('click', (e, d) => {
+                d3.select('#team').remove();
+                d3.select('body')
+                    .append('div')
+                    .attr('id', 'team');
+                d3.select('#tooltip')
+                    .style('visibility', "hidden");
+
+                
+
+                /* 重置div team，之后调用第二个视图 */
+
+
+
+
+
+
+
+
+
+
             });
         
         RectGraph[i] = block.append("rect")
             .attr("x", 0)
-            .attr("y", 0)
+            .attr("y", dheight - height * 0.15)
             .attr("width", 20)
             .attr("height", 20)
             .attr("fill", color[A[i]])
@@ -205,16 +227,16 @@ function draw(data, years, attr){
         
         RectGraph[i].transition()
             .duration(1000)
-            .attr("y", i * 20);
+            .attr("y", dheight - height * 0.15 + i * 20);
         
         TextGraph[i] = block.append("text")
             .attr("x", 30)
-            .attr("y", 15)
+            .attr("y", dheight - height * 0.15 + 15)
             .text(d)
         
         TextGraph[i].transition()
             .duration(1000)
-            .attr("y", 15 + i * 20);
+            .attr("y", dheight - height * 0.15 + 15 + i * 20);
     });
         
         
@@ -232,7 +254,7 @@ function init(Data, years, attr){
         .attr('id', 'Parallel')
         .attr('width', width)
         .attr('height', height)
-        .attr("transform", "translate(" + 0 + "," + -130 + ")");
+        .attr("transform", "translate(" + 0 + "," + -150 + ")");
     Data = Data.filter((d, i) => (years.includes(d["Season"])));
     //d3.select('text').text(Data.length);
     
@@ -254,7 +276,7 @@ function initial(Data){
         .attr('id', 'p1')
         .attr('height', 24)
         .attr('width', 500)
-        .attr("transform", "translate(" + 0 + "," + -130 + ")");
+        .attr("transform", "translate(" + 300 + "," + -170 + ")");
 
     svg = div.append('svg')
         .attr('id', 'Parallel');
