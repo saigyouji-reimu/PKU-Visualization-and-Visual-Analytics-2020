@@ -9,7 +9,7 @@ function getMinMax(data, attr) {
   let min = 1e9,
     max = 0;
   data.forEach((d) => {
-    let v = parseInt(d[attr]);
+    let v = parseFloat(d[attr]);
     if (v > max) max = v;
     if (v < min) min = v;
   });

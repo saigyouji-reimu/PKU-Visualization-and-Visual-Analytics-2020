@@ -1,7 +1,6 @@
 import * as d3 from 'd3';
-import { getActualDim, get_team } from './utils';
+import { getActualDim, getMinMax, get_team } from './utils';
 import { kmeans } from './data_process';
-import { TimeSpan } from './timespan';
 
 const show_attr = [
   'FGA',
@@ -36,20 +35,6 @@ const color = [
 
 let width;
 let height;
-
-function get_min_max(data, attr) {
-  let min = 1e9;
-  let max = 0;
-
-  data.forEach((d, i) => {
-    let v = parseFloat(d[attr]);
-    if (v > max) max = v;
-    if (v < min) min = v;
-  });
-
-  //console.log('attr', attr, 'min', min, 'max', max);
-  return [max, min];
-}
 
 let team = new Array();
 
@@ -93,7 +78,7 @@ Parallel.prototype.draw = function (data, years, attr) {
   attr.forEach((d, i) => {
     Scale[i] = d3
       .scaleLinear()
-      .domain(get_min_max(ave_d, d))
+      .domain(getMinMax(ave_d, d))
       .range([0, height * 0.8]);
 
     Axis[i] = d3.axisLeft(Scale[i]).ticks(7);
