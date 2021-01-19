@@ -41,11 +41,17 @@ let team = new Array();
 let Scale = new Array();
 let Axis = new Array();
 let svg;
+let L;
 
 let LineGraph = new Array();
 let RectGraph = new Array();
 let TextGraph = new Array();
+let LineData = new Array();
+let Linedata = new Array();
 let block = new Array();
+let ave_d = new Array(),
+  ori_d = new Array();
+let A;
 
 let dur = 1000;
 
@@ -55,9 +61,83 @@ function Parallel(selector) {
   svg = d3.select(selector);
 }
 
+let Text;
+function show_up(i) {
+  let d = team[i];
+  Text = svg
+    .append('text')
+    .text(d)
+    .attr(
+      'transform',
+      'translate(' + LineData[L - 1].x + ',' + LineData[L - 1].y + ')',
+    );
+
+  LineGraph[i].attr('opacity', 0.9).attr('stroke-width', 9);
+
+  let content = '<table><tr><td>' + d + '</td></tr>';
+  show_attr.forEach((dd, j) => {
+    content =
+      content + '<tr><td>' + dd + '</td><td>' + ave_d[i][dd] + '</td></tr>';
+  });
+  content = content + '</table>';
+
+  // tooltip
+  let tooltip = d3.select('#tooltip');
+  tooltip
+    .html(content)
+    .style('left', width * 0.91 + 'px')
+    .style('top', height * 0.15 + 'px')
+    //.transition().duration(500)
+    .style('visibility', 'visible');
+}
+
+function show_down(i) {
+  if (Text != null) Text.remove();
+  LineGraph[i].attr('opacity', 0.2).attr('stroke-width', 4);
+  let tooltip = d3.select('#tooltip');
+  tooltip.style('visibility', 'hidden');
+}
+
+function set_function(i) {
+  LineGraph[i]
+    .on('mouseover', (e, _d) => {
+      show_up(i);
+    })
+    .on('mouseout', (e, d) => {
+      show_down(i);
+    });
+
+  block[i]
+    .on('mouseover', (e, _d) => {
+      RectGraph.forEach((d, j) => {
+        if (A[j] == A[i]) {
+          RectGraph[j].attr('stroke-width', 2);
+          LineGraph[j].attr('opacity', 0.5).attr('stroke-width', 6);
+        }
+      });
+      show_up(i);
+    })
+    .on('mouseout', (e, d) => {
+      show_down(i);
+      RectGraph.forEach((d, j) => {
+        RectGraph[j].attr('stroke-width', 0);
+        LineGraph[j].attr('opacity', 0.2).attr('stroke-width', 4);
+      });
+    });
+}
+
 Parallel.prototype.draw = function (data, years, attr) {
-  let ave_d = new Array(),
-    ori_d = new Array();
+  attr.forEach((d, i) => {
+    Scale[i] = d3
+      .scaleLinear()
+      .domain(getMinMax(data, d))
+      .range([0, height * 0.8]);
+
+    Axis[i] = d3.axisLeft(Scale[i]).ticks(7);
+  });
+  data = data.filter((d, i) => years.includes(d['Season']));
+
+  (ave_d = new Array()), (ori_d = new Array());
   team = get_team(data);
   team.forEach((d, i) => {
     ave_d[i] = {};
@@ -73,18 +153,9 @@ Parallel.prototype.draw = function (data, years, attr) {
     });
   });
 
-  let A = kmeans(ori_d, 7, 'team');
+  A = kmeans(ori_d, 7, 'team');
 
-  attr.forEach((d, i) => {
-    Scale[i] = d3
-      .scaleLinear()
-      .domain(getMinMax(ave_d, d))
-      .range([0, height * 0.8]);
-
-    Axis[i] = d3.axisLeft(Scale[i]).ticks(7);
-  });
-
-  let L = attr.length;
+  L = attr.length;
   let delta = (width * 0.8) / L;
   let left = width * 0.04;
   let Left = width * 0.05;
@@ -140,87 +211,31 @@ Parallel.prototype.draw = function (data, years, attr) {
   });
 
   team.forEach((d, i) => {
-    let Linedata = new Array();
-    let LineData = new Array();
+    Linedata = new Array();
+    LineData = new Array();
 
     attr.forEach((a, j) => {
       Linedata[j] = { x: Left, y: dheight + Scale[j](ave_d[i][a]) };
       LineData[j] = { x: Left + delta * j, y: dheight + Scale[j](ave_d[i][a]) };
     });
 
-    let Text;
-    function show_up() {
-      Text = svg
-        .append('text')
-        .text(d)
-        .attr(
-          'transform',
-          'translate(' + LineData[L - 1].x + ',' + LineData[L - 1].y + ')',
-        );
-
-      LineGraph[i].attr('opacity', 0.9).attr('stroke-width', 10);
-
-      let content = '<table><tr><td>' + d + '</td></tr>';
-      show_attr.forEach((dd, i) => {
-        content =
-          content + '<tr><td>' + dd + '</td><td>' + ave_d[i][dd] + '</td></tr>';
-      });
-      content = content + '</table>';
-
-      // tooltip
-      let tooltip = d3.select('#tooltip');
-      tooltip
-        .html(content)
-        .style('left', width * 0.91 + 'px')
-        .style('top', height * 0.15 + 'px')
-        //.transition().duration(500)
-        .style('visibility', 'visible');
-    }
-
-    function show_down() {
-      Text.remove();
-      LineGraph[i].attr('opacity', 0.2).attr('stroke-width', 6);
-      let tooltip = d3.select('#tooltip');
-      tooltip.style('visibility', 'hidden');
-    }
-
     LineGraph[i] = svg
       .append('path')
       .attr('d', Line(Linedata))
       .attr('stroke', color[A[i]])
-      .attr('stroke-width', 6)
+      .attr('stroke-width', 4)
       .attr('fill', 'none')
       .attr('opacity', 0.2)
       .attr('id', d)
-      .attr('class', A[i])
-      .on('mouseover', (e, _d) => {
-        show_up();
-      })
-      .on('mouseout', (e, d) => {
-        show_down();
-      });
+      .attr('class', A[i]);
 
     LineGraph[i].transition().duration(dur).attr('d', Line(LineData));
 
     block[i] = svg
       .append('g')
-      .attr('transform', 'translate(' + width * 0.83 + ',' + dheight + ')')
-      .on('mouseover', (e, _d) => {
-        RectGraph.forEach((d, j) => {
-          if (A[j] == A[i]) {
-            RectGraph[j].attr('stroke-width', 2);
-            LineGraph[j].attr('opacity', 0.5).attr('stroke-width', 7);
-          }
-        });
-        show_up();
-      })
-      .on('mouseout', (e, d) => {
-        show_down();
-        RectGraph.forEach((d, j) => {
-          RectGraph[j].attr('stroke-width', 0);
-          LineGraph[j].attr('opacity', 0.2).attr('stroke-width', 6);
-        });
-      });
+      .attr('transform', 'translate(' + width * 0.83 + ',' + dheight + ')');
+
+    set_function(i);
 
     RectGraph[i] = block[i]
       .append('rect')
@@ -246,14 +261,68 @@ Parallel.prototype.draw = function (data, years, attr) {
         .data(team)*/
 };
 
+Parallel.prototype.change_years = function (data, years, attr) {
+  data = data.filter((d, i) => years.includes(d['Season']));
+  let ave_d = new Array(),
+    ori_d = new Array();
+  team.forEach((d, i) => {
+    ave_d[i] = {};
+    ori_d[i] = [];
+    show_attr.forEach((a, j) => {
+      ave_d[i][a] = 0;
+      data.forEach((f) => {
+        if (f['Team'] == d) ave_d[i][a] += f[a];
+      });
+      ave_d[i][a] /= years.length;
+      ave_d[i][a] = ave_d[i][a].toFixed(4);
+      ori_d[i][j] = ave_d[i][a];
+    });
+  });
+
+  A = kmeans(ori_d, 7, 'team');
+
+  let L = attr.length;
+  let delta = (width * 0.8) / L;
+  let left = width * 0.04;
+  let Left = width * 0.05;
+  let dheight = height * 0.1;
+
+  let Line = d3
+    .line()
+    .x(function (d) {
+      return d.x;
+    })
+    .y(function (d) {
+      return d.y;
+    });
+
+  team.forEach((d, i) => {
+    let LineData = new Array();
+    attr.forEach((a, j) => {
+      LineData[j] = { x: Left + delta * j, y: dheight + Scale[j](ave_d[i][a]) };
+    });
+
+    LineGraph[i]
+      .transition()
+      .duration(dur)
+      .attr('d', Line(LineData))
+      .transition()
+      .duration(dur)
+      .attr('stroke', color[A[i]]);
+
+    RectGraph[i].transition().duration(dur).attr('fill', color[A[i]]);
+
+    set_function(i);
+  });
+  d3.select('text').text('flag');
+};
+
 Parallel.prototype.disappear = function () {
   svg.style('visibility', 'hidden');
-  d3.select('#s1').style('visibility', 'hidden');
 };
 
 Parallel.prototype.show = function () {
   svg.style('visibility', 'visible');
-  d3.select('#s1').style('visibility', 'visible');
 };
 
 Parallel.prototype.set_listener = function (updater) {
