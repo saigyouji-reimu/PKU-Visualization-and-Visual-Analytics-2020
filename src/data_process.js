@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import { mean } from "d3";
 let team_keys = ["FGM", "FGA", "FG%", "3P","3PA","3P%","FTM","FTA","FT%",
 "ORB","DRB","TRB","AST","STL","BLK","TOV","PF","PTS","+/-","TS%",
 "eFG%","3PAr","ORtg","DRtg","Home Win%","Away Win%"]
@@ -190,9 +191,16 @@ function kmeans(ori_data, k, mode, max_iter=1000) {
         var data = dict_to_list_player(ori_data)
     }
     var means = [];
-    for (var i=0;i<k;i++) {
-        means.push(data[i])        
-    }
+    var id = [];
+    /*data.forEach((d, i) => {
+        id[i] = i;
+    })
+    for(var i = 0; i < k; i++){
+        var temp = Math.random()*id.length >> 0;
+        means.push(data[id.splice(temp, 1)]);
+    }*/
+    for(var i = 0; i < k; i++)
+        means.push(data[i]);
     
     for (var i=0; i<max_iter; i++) {
         var assignments = makeAssignments(data, means);

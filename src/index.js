@@ -1,5 +1,6 @@
 import * as d3 from "d3";
 import { TimeSpan } from "./timespan";
+import { SingleSpan } from "./singlespan";
 import { getActualDim, get_team } from "./utils";
 import { kmeans } from "./data_process";
 
@@ -52,8 +53,7 @@ function draw(data, years, attr){
         });
     });
 
-    let A = kmeans(ori_d, 8, 'team');
-    d3.select('text').text(A.length);
+    let A = kmeans(ori_d, 7, 'team');
     
     attr.forEach((d, i) => {
         Scale[i] = d3.scaleLinear()
@@ -99,7 +99,7 @@ function draw(data, years, attr){
 
     //d3.select('text').text(data[2].Team);
 
-    Axis.forEach((d, i) => {
+    attr.forEach((d, i) => {
         svg.append("g")
             .attr("transform", "translate(" + Left + "," + (dheight) + ")")
             .call(Axis[i])
@@ -254,7 +254,7 @@ function init(Data, years, attr){
         .attr('id', 'Parallel')
         .attr('width', width)
         .attr('height', height)
-        .attr("transform", "translate(" + 0 + "," + -150 + ")");
+        .attr("transform", "translate(" + 0 + "," + -400 + ")");
     Data = Data.filter((d, i) => (years.includes(d["Season"])));
     //d3.select('text').text(Data.length);
     
@@ -276,25 +276,37 @@ function initial(Data){
         .attr('id', 'p1')
         .attr('height', 24)
         .attr('width', 500)
-        .attr("transform", "translate(" + 300 + "," + -170 + ")");
+        .attr("transform", "translate(" + 300 + "," + -420 + ")");
 
-    svg = div.append('svg')
-        .attr('id', 'Parallel');
-    
     div.append('svg')
         .attr('id', 's1')
         .attr('width', 24)
-        .attr("transform", "translate(" + 0.8 * width + "," + 110 + ")");
+        .attr('height', 400)
+        .attr("transform", "translate(" + 0.73 * width + "," + 110 + ")");
+
+    svg = div.append('svg')
+        .attr('id', 'Parallel');
 
     let ts = new TimeSpan('#p1', Data);
     ts.draw_line();
     ts.draw_circles();
+
+    let ss = new SingleSpan('#s1', [0, 1], true);
+    ss.draw_line();
+    ss.draw_circles();
+
     let years = [2015,2016,2017,2018,2019,2020];
-    let nyears = new Array();
+    let nyears = years;
+    let Tattr = Oattr;
     team = get_team(Data);
     ts.set_listener(() => {
         nyears = years.filter(d => (d >= ts.start && d <= ts.end));
-        init(Data, nyears, Oattr);
+        init(Data, nyears, Tattr);
+    });
+    ss.set_listener(() => {
+        if(ss.start == 0) Tattr = Oattr;
+        else Tattr = Dattr;
+        init(Data, nyears, Tattr);
     });
 
     init(Data, years, Oattr);

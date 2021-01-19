@@ -115,18 +115,17 @@ SingleSpan.prototype.set_listener = function (updater) {
         d3.drag()
             .on("drag", (e, d) => {
                 const width = this.flag ? this.height : this.width;
-                const mx = boundValue(e.x, 0.1 * width, 0.9 * width);
+                const mx = boundValue(this.flag ? e.y : e.x, 0.1 * width, 0.9 * width);
             
                 this.start = Math.round(
                     this.minv + ((this.maxv - this.minv) * (mx / width - 0.1)) / 0.8
                 );
-                if (this.start >= this.end) this.start = this.end;
                 this.draw_circles();
-
-                
             })
             .on("end", (e, d) => {
                 updater();
             })
     )
 }
+
+export { SingleSpan };
