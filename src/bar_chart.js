@@ -4,6 +4,7 @@ import { getActualDim } from './utils';
 const margin = { top: 20, right: 0, bottom: 30, left: 40 };
 const base_color = 'steelblue';
 const invalid_color = 'gray';
+const old_color = 'orange';
 const durat = 800;
 
 function getTransition() {
@@ -70,7 +71,8 @@ BarChart.prototype.draw = function (data, seasons) {
   let rect = svg.append('g').attr('class', 'bars').selectAll('rect');
 
   function update_chart(data, season) {
-    const new_data = data.filter((d) => d.season === season);
+    data.forEach((d) => (d.bias = d.season - season));
+    const new_data = data.filter((d) => d.bias === 0 || d.bias === 1);
     rect = rect
       .data(new_data, (d) => d.value)
       .join(
@@ -78,10 +80,14 @@ BarChart.prototype.draw = function (data, seasons) {
           enter
             .append('rect')
             .attr('fill', base_color)
-            .attr('x', (d) => x(d.name) + x.bandwidth() - 5)
-            .attr('y', (d) => y(d.value))
-            .attr('width', 0)
-            .attr('height', (d) => y(0) - y(d.value)),
+            // .attr('x', (d) => x(d.name) + x.bandwidth() - 5)
+            // .attr('y', (d) => y(d.value))
+            // .attr('width', 0)
+            // .attr('height', (d) => y(0) - y(d.value)),
+            .attr('x', (d) => x(d.name) + (x.bandwidth() / 2 - 5) * d.bias + 5)
+            .attr('y', (d) => y(0))
+            .attr('width', (d) => x.bandwidth() / 2 - 5)
+            .attr('height', (d) => 0),
         (update) => update,
         (exit) =>
           exit.attr('fill', invalid_color).call((exit) =>
@@ -91,16 +97,18 @@ BarChart.prototype.draw = function (data, seasons) {
               .remove(),
           ),
       );
-    console.log(rect);
     rect
       .transition()
-      .attr('x', (d) => x(d.name) + 5)
-      .attr('width', (d) => x.bandwidth() - 10);
+      .attr('fill', (d) => (d.bias === 1 ? base_color : old_color))
+      .attr('x', (d) => x(d.name) + (x.bandwidth() / 2 - 5) * d.bias + 5)
+      .attr('y', (d) => y(d.value))
+      .attr('width', (d) => x.bandwidth() / 2 - 5)
+      .attr('height', (d) => y(0) - y(d.value));
   }
 
   let i = 1.0;
   for (const s of seasons) {
-    setTimeout(() => update_chart(data, s), durat * i);
+    setTimeout(() => update_chart(data, s - 1), durat * i);
     i += 1.0;
   }
 };
