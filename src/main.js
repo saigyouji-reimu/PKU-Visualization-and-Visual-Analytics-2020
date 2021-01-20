@@ -372,21 +372,20 @@ function draw_main() {
 }
 
 function radar(a1, a2, a3, a4, a5, a6) {
-  var width1 = 300,
-    height1 = 300;
+  const [width1, height1] = getActualDim('#container3');
   // 创建一个分组用来组合要画的图表元素
   let main1 = d3
     .select('#container3')
     .select('svg')
     .attr('width', width1)
     .attr('height', height1)
-    .classed('main1', true)
-    .attr('transform', 'translate(' + width1 / 2 + ',' + height1 / 2 + ')');
-  var data1 = {
+    .classed('main1', true);
+    // .attr('transform', 'translate(' + width1 / 2 + ',' + height1 / 2 + ')');
+  let data1 = {
     fieldNames: ['FG%', '3P%', 'FT%', 'TS%', 'eFG%', 'ORtg'],
     values: [[a1, a2, a3, a4, a5, a6]],
   };
-  var radius = 100,
+  let radius = Math.min(width1, height1) / 3,
     // 指标的个数，即fieldNames的长度
     total = 6,
     // 需要将网轴分成几级，即网轴上从小到大有多少个正多边形
@@ -396,18 +395,18 @@ function radar(a1, a2, a3, a4, a5, a6) {
     rangeMax = 1,
     arc = 2 * Math.PI;
   // 每项指标所在的角度
-  var onePiece = arc / total;
+  let onePiece = arc / total;
   // 计算网轴的正多边形的坐标
-  var polygons = {
+  let polygons = {
     webs: [],
     webPoints: [],
   };
-  for (var k = level; k > 0; k--) {
-    var webs = '',
+  for (let k = level; k > 0; k--) {
+    let webs = '',
       webPoints = [];
-    var r = (radius / level) * k;
-    for (var i = 0; i < total; i++) {
-      var x = r * Math.sin(i * onePiece) + 0.5 * width1,
+    let r = (radius / level) * k;
+    for (let i = 0; i < total; i++) {
+      let x = r * Math.sin(i * onePiece) + 0.5 * width1,
         y = r * Math.cos(i * onePiece) + 0.5 * height1;
       webs += x + ',' + y + ' ';
       webPoints.push({
@@ -419,7 +418,7 @@ function radar(a1, a2, a3, a4, a5, a6) {
     polygons.webPoints.push(webPoints);
   }
   // 绘制网轴
-  var webs = main1.append('g').classed('webs', true);
+  let webs = main1.append('g').classed('webs', true);
   webs
     .selectAll('polygon')
     .data(polygons.webs)
@@ -432,7 +431,7 @@ function radar(a1, a2, a3, a4, a5, a6) {
     .style('stroke', 'gray')
     .style('stroke - dasharray', 10, 5);
   // 添加纵轴
-  var lines = main1.append('g').classed('lines', true);
+  let lines = main1.append('g').classed('lines', true);
   lines
     .selectAll('line')
     .data(polygons.webPoints[0])
@@ -449,15 +448,15 @@ function radar(a1, a2, a3, a4, a5, a6) {
     .style('stroke', 'black');
 
   // 计算雷达图表的坐标
-  var areasData = [];
-  var values = data1.values;
-  for (var i = 0; i < values.length; i++) {
-    var value = values[i],
+  let areasData = [];
+  let values = data1.values;
+  for (let i = 0; i < values.length; i++) {
+    let value = values[i],
       area = '',
       points = [];
-    for (var k = 0; k < total; k++) {
-      var r = (radius * (value[k] - rangeMin)) / (rangeMax - rangeMin);
-      var x = r * Math.sin(k * onePiece) + 0.5 * width1,
+    for (let k = 0; k < total; k++) {
+      let r = (radius * (value[k] - rangeMin)) / (rangeMax - rangeMin);
+      let x = r * Math.sin(k * onePiece) + 0.5 * width1,
         y = r * Math.cos(k * onePiece) + 0.5 * height1;
       area += x + ',' + y + ' ';
       points.push({
@@ -471,7 +470,7 @@ function radar(a1, a2, a3, a4, a5, a6) {
     });
   }
   // 添加g分组包含所有雷达图区域
-  var areas = main1.append('g').classed('areas', true);
+  let areas = main1.append('g').classed('areas', true);
   // 添加g分组用来包含一个雷达图区域下的多边形以及圆点
   areas
     .selectAll('g')
@@ -481,9 +480,9 @@ function radar(a1, a2, a3, a4, a5, a6) {
     .attr('class', function (d, i) {
       return 'area' + (i + 1);
     });
-  for (var i = 0; i < areasData.length; i++) {
+  for (let i = 0; i < areasData.length; i++) {
     // 依次循环每个雷达图区域
-    var area = areas.select('.area' + (i + 1)),
+    let area = areas.select('.area' + (i + 1)),
       areaData = areasData[i];
     // 绘制雷达图区域下的多边形
     area
@@ -499,7 +498,7 @@ function radar(a1, a2, a3, a4, a5, a6) {
       .style('stroke - width', 3);
 
     // 绘制雷达图区域下的点
-    var circles = area.append('g').classed('circles', true);
+    let circles = area.append('g').classed('circles', true);
     circles
       .selectAll('circle')
       .data(areaData.points)
@@ -518,17 +517,17 @@ function radar(a1, a2, a3, a4, a5, a6) {
       .style('fill', 'white')
       .style('stroke - width', 3);
   }
-  var textPoints = [];
-  var textRadius = radius + 20;
-  for (var i = 0; i < total; i++) {
-    var x = textRadius * Math.sin(i * onePiece) + 0.5 * width1,
+  let textPoints = [];
+  let textRadius = radius + 20;
+  for (let i = 0; i < total; i++) {
+    let x = textRadius * Math.sin(i * onePiece) + 0.5 * width1,
       y = textRadius * Math.cos(i * onePiece) + 0.5 * height1;
     textPoints.push({
       x: x,
       y: y,
     });
   }
-  var texts = main1.append('g').classed('texts', true);
+  let texts = main1.append('g').classed('texts', true);
   texts
     .selectAll('text')
     .data(textPoints)
@@ -545,7 +544,7 @@ function radar(a1, a2, a3, a4, a5, a6) {
     });
 }
 function getColor(idx) {
-  var palette = [
+  let palette = [
     '#2ec7c9',
     '#b6a2de',
     '#5ab1ef',
