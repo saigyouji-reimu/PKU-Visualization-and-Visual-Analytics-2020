@@ -301,7 +301,6 @@ Parallel.prototype.show = function(){
 Parallel.prototype.set_listener = function (updater){
     block.forEach((d, i) => {
         d.on('click', (e, f) => {
-            this.disappear();
             updater(team[i]);
         })
     })

@@ -22,6 +22,16 @@
     }
 }
 
+header {
+    font-size: 2rem;
+    text-align: center;
+    top: 0;
+    bottom: auto;
+    width: 100%;
+    height: 5%;
+    margin-bottom: 50px;
+}
+
 #tooltip{
     position: absolute;           
     text-align: center;
@@ -45,17 +55,108 @@
     font-size: 0.8rem;
 }
 
+#team {
+    top: 100px;
+}
 
 html,body {
+    background-color: #f6f6f6;
     width: 100%;
     height: 100%;
     font-size: 12px;
-    overflow: scroll;
+}
+
+
+#xItem
+{
+    position:absolute;
+    left:10px;
+    top:150px;
+    font-size: 12px;
+}
+
+#xname {
+    position:absolute;
+    left:10px;
+    top:180px;
+    font-size: 12px;
+}
+
+#yItem
+{
+    position:absolute;
+    left:10px;
+    top:210px;
+    font-size: 12px;
+}
+
+#yname {
+    position:absolute;
+    left:10px;
+    top:240px;
+    font-size: 12px;
+}
+
+#tItem
+{
+    position:absolute;
+    left:10px;
+    top:270px;
+    font-size: 12px;
+}
+
+#tname {
+    position:absolute;
+    left:10px;
+    top:300px;
+    font-size: 12px;
 }
 
 #container {
-    width: 100%; 
-    height: 100%;  
+    width: 1200px; 
+    height: 800px;  
     background-color: rgba(240, 240, 240, 0.9);
-    overflow: scroll;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    float: left;
+    left: 0px;
+    top: 70px;
+    position: absolute;  
+}
+
+#container3 {
+    width: 600px; 
+    height: 800px;  
+    background-color: rgba(240, 240, 240, 0.9);
+    overflow: hidden;
+    border: 1px solid #ccc;
+    float: left;
+    left: 1200px;
+    top: 70px;
+    position: absolute; 
+}
+
+.title {
+    font-size: 1.5rem;
+    text-anchor: middle;
+}
+
+.axis_label {
+    font-size: 1rem;
+    text-anchor: middle;
+}
+
+.point {
+    fill: #1f77b4;
+}
+
+.domain {
+    stroke: rgb(80,80,80);
+    stroke-linecap: round;
+    stroke-width: 0.13rem;
+}
+
+.tick line {
+    stroke: rgb(80,80,80);
+    stroke-linecap: round;
 }

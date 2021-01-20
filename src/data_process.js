@@ -105,15 +105,7 @@ function dict_to_list_team(data) {
 }
 
 function dict_to_list_player(data) {
-    var new_data = [];
-    for (let player of data) {
-        var temp_l = [];
-        for (let key of player_keys) {
-            var l_m = get_min_max(data, key);
-            temp_l.push((player[key]-l_m[0])/(l_m[1]-l_m[0]));
-        }
-        new_data.push(temp_l);
-    }
+    var new_data = data;
     return new_data;
 }
 

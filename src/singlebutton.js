@@ -12,29 +12,27 @@ function SingleButton(selector, range){
     this.initialized = false;
 }
 
-let b, r, t;
-
 SingleButton.prototype.draw_rect = function () {
-    b = this.svg.append('g')
+    this.b = this.svg.append('g')
         .attr("transform", "translate(" + 0 + "," + 0 + ")");
 
-    r = b.append('rect')
+    this.r = this.b.append('rect')
         .attr('width', this.width)
         .attr('height', this.height)
         .attr('fill', 'yellow')
         .attr('stroke', 'black')
         .attr('stroke-width', 2);
 
-    t = b.append('text')
+    this.t = this.b.append('text')
         .attr("transform", "translate(" + 5 + "," + 15 + ")")
         .text('show ' + this.range[this.choosen ^ 1]);
 }
 
 SingleButton.prototype.set_listener = function(updater) {
-    b.on('click', (e, d) => {
+    this.b.on('click', (e, d) => {
         this.choosen ^= 1;
-        r.attr('fill', this.choosen ? 'orange' : 'yellow');
-        t.text('show ' + this.range[this.choosen ^ 1]);
+        this.r.attr('fill', this.choosen ? 'orange' : 'yellow');
+        this.t.text('show ' + this.range[this.choosen ^ 1]);
         updater();
     });
 }
