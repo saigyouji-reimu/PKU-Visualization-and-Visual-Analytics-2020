@@ -86,6 +86,7 @@ function initial(Data){
     let years = [2015,2016,2017,2018,2019,2020];
     let nyears = years;
     let Tattr = Oattr;
+    let nowt = 'Golden State Warriors';
 
     barc.draw(bar_data_o, years);
 
@@ -98,11 +99,18 @@ function initial(Data){
     ss.set_listener(() => {
         Tattr = ss.choosen ? Dattr : Oattr;
         init(Data, nyears, Tattr);
+        Par.set_listener((d) => {
+            nowt = d;
+            bar_data = barc.gen_data(Data, d, Tattr);
+            barc.draw(bar_data, nyears);
+        });
+        bar_data = barc.gen_data(Data, nowt, Tattr);
         barc.draw(bar_data, nyears);
     });
 
     init(Data, years, Oattr);
     Par.set_listener((d) => {
+        nowt = d;
         bar_data = barc.gen_data(Data, d, Tattr);
         barc.draw(bar_data, nyears);
     });
