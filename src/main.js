@@ -350,16 +350,16 @@ function draw_main() {
         .style('top', y(parseFloat(d[y_attr + year])) + 5 + 'px')
         //.transition().duration(500)
         .style('visibility', 'visible');
-      let p1 = parseFloat(d['FG% ' + year]);
-      if (isNaN(parseFloat(d['FG% ' + year]))) p1 = 0;
-      let p2 = parseFloat(d['3P% ' + year]);
-      if (isNaN(parseFloat(d['3P% ' + year]))) p2 = 0;
+       let p1 = parseFloat(d['3PA ' + year]) / parseFloat(d['FGA ' + year]);
+      if (isNaN(p1)) p1 = 0;
+        let p2 = parseFloat(d['ORB ' + year])/parseFloat(d['TRB ' + year]);
+      if (isNaN(p2)) p2 = 0;
       let p3 = parseFloat(d['FT% ' + year]);
       if (isNaN(parseFloat(d['FT% ' + year]))) p3 = 0;
-      let p4 = parseFloat(d['TS% ' + year]);
-      if (isNaN(parseFloat(d['TS% ' + year]))) p4 = 0;
-      let p5 = parseFloat(d['eFG% ' + year]);
-      if (isNaN(parseFloat(d['eFG% ' + year]))) p5 = 0;
+        let p4 = parseFloat(d['AST ' + year]) /((parseFloat(d['TOV ' + year])+parseFloat(d['AST ' + year])));
+      if (isNaN(p4)) p4 = 0;
+      let p5 = parseFloat(d['DRtg ' + year])/150;
+      if (isNaN(parseFloat(d['DRtg ' + year]))) p5 = 0;
       let p6 = parseFloat(d['ORtg ' + year]) / 150;
       if (isNaN(parseFloat(d['ORtg ' + year]))) p6 = 0;
       radar(p1, p2, p3, p4, p5, p6);
@@ -382,7 +382,7 @@ function radar(a1, a2, a3, a4, a5, a6) {
     .classed('main1', true);
     // .attr('transform', 'translate(' + width1 / 2 + ',' + height1 / 2 + ')');
   let data1 = {
-    fieldNames: ['FG%', '3P%', 'FT%', 'TS%', 'eFG%', 'ORtg'],
+    fieldNames: ['3PA%', 'ORB%', 'FT%', 'AST%', 'DRtg', 'ORtg'],
     values: [[a1, a2, a3, a4, a5, a6]],
   };
   let radius = Math.min(width1, height1) / 3,
