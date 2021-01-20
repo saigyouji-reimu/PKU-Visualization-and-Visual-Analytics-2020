@@ -380,6 +380,7 @@ function radar(a1, a2, a3, a4, a5, a6) {
     .attr('width', width1)
     .attr('height', height1)
     .classed('main1', true);
+  main1.selectAll('g').remove();
     // .attr('transform', 'translate(' + width1 / 2 + ',' + height1 / 2 + ')');
   let data1 = {
     fieldNames: ['3PA%', 'ORB%', 'FT%', 'AST%', 'DRtg', 'ORtg'],
