@@ -1,162 +1,148 @@
-@font-face {
-    font-family: 'Khand-Regular';
-    src: url('./font/Khand-Regular.ttf');
-}
-@font-face {
-    font-family: 'KAITI';
-    src: url(./font/KAITI.ttf);
-}
-@font-face {
-    font-family: 'PingFangSC-Regular';
-    src: url(./font/PingFang-SC-Regular.ttf);
-}
+@import 'bootstrap/dist/css/bootstrap.min.css';
 
 @media only screen and (min-width: 1080px) {
-    html {
-        font-size: 15px !important;
-    }
+  html {
+    font-size: 15px !important;
+  }
 }
 @media only screen and (min-width: 1440px) {
-    html {
-        font-size: 25px !important;
-    }
+  html {
+    font-size: 25px !important;
+  }
 }
 
 header {
-    font-size: 2rem;
-    text-align: center;
-    top: 0;
-    bottom: auto;
-    width: 100%;
-    height: 5%;
-    margin-bottom: 50px;
+  font-size: 2rem;
+  text-align: center;
+  top: 0;
+  bottom: auto;
+  width: 100%;
+  height: 5%;
+  margin-bottom: 50px;
 }
 
-#tooltip{
-    position: absolute;           
-    text-align: center;
-    background-color: rgba(250, 250, 250, 1);
-    border: 1px solid rgb(200,200,200);
-    border-radius:5px;
-    font-size:0.8rem;
-    padding:4px;
-    color:black;
-    z-index: 3;
-    visibility: hidden;
-    opacity: 0.8;
+#tooltip {
+  position: absolute;
+  text-align: center;
+  background-color: rgba(250, 250, 250, 1);
+  border: 1px solid rgb(200, 200, 200);
+  border-radius: 5px;
+  font-size: 0.8rem;
+  padding: 4px;
+  color: black;
+  z-index: 3;
+  visibility: hidden;
+  opacity: 0.8;
 }
 
 .title {
-    font-size: 1rem;
-    text-anchor: middle;
+  font-size: 1rem;
+  text-anchor: middle;
 }
 
 #Range {
-    font-size: 0.8rem;
+  font-size: 0.8rem;
 }
 
 #team {
-    top: 100px;
+  top: 100px;
 }
 
-html,body {
-    background-color: #f6f6f6;
-    width: 100%;
-    height: 100%;
-    font-size: 12px;
+html,
+body {
+  background-color: #f6f6f6;
+  width: 100%;
+  height: 100%;
+  font-size: 12px;
 }
 
-
-#xItem
-{
-    position:absolute;
-    left:10px;
-    top:150px;
-    font-size: 12px;
+#xItem {
+  position: absolute;
+  left: 10px;
+  top: 150px;
+  font-size: 12px;
 }
 
 #xname {
-    position:absolute;
-    left:10px;
-    top:180px;
-    font-size: 12px;
+  position: absolute;
+  left: 10px;
+  top: 180px;
+  font-size: 12px;
 }
 
-#yItem
-{
-    position:absolute;
-    left:10px;
-    top:210px;
-    font-size: 12px;
+#yItem {
+  position: absolute;
+  left: 10px;
+  top: 210px;
+  font-size: 12px;
 }
 
 #yname {
-    position:absolute;
-    left:10px;
-    top:240px;
-    font-size: 12px;
+  position: absolute;
+  left: 10px;
+  top: 240px;
+  font-size: 12px;
 }
 
-#tItem
-{
-    position:absolute;
-    left:10px;
-    top:270px;
-    font-size: 12px;
+#tItem {
+  position: absolute;
+  left: 10px;
+  top: 270px;
+  font-size: 12px;
 }
 
 #tname {
-    position:absolute;
-    left:10px;
-    top:300px;
-    font-size: 12px;
+  position: absolute;
+  left: 10px;
+  top: 300px;
+  font-size: 12px;
 }
 
 #container {
-    width: 1200px; 
-    height: 800px;  
-    background-color: rgba(240, 240, 240, 0.9);
-    overflow: hidden;
-    border: 1px solid #ccc;
-    float: left;
-    left: 0px;
-    top: 70px;
-    position: absolute;  
+  width: 1200px;
+  height: 800px;
+  background-color: rgba(240, 240, 240, 0.9);
+  overflow: hidden;
+  border: 1px solid #ccc;
+  float: left;
+  left: 0px;
+  top: 70px;
+  position: absolute;
 }
 
 #container3 {
-    width: 600px; 
-    height: 800px;  
-    background-color: rgba(240, 240, 240, 0.9);
-    overflow: hidden;
-    border: 1px solid #ccc;
-    float: left;
-    left: 1200px;
-    top: 70px;
-    position: absolute; 
+  width: 600px;
+  height: 800px;
+  background-color: rgba(240, 240, 240, 0.9);
+  overflow: hidden;
+  border: 1px solid #ccc;
+  float: left;
+  left: 1200px;
+  top: 70px;
+  position: absolute;
 }
 
 .title {
-    font-size: 1.5rem;
-    text-anchor: middle;
+  font-size: 1.5rem;
+  text-anchor: middle;
 }
 
 .axis_label {
-    font-size: 1rem;
-    text-anchor: middle;
+  font-size: 1rem;
+  text-anchor: middle;
 }
 
 .point {
-    fill: #1f77b4;
+  fill: #1f77b4;
 }
 
 .domain {
-    stroke: rgb(80,80,80);
-    stroke-linecap: round;
-    stroke-width: 0.13rem;
+  stroke: rgb(80, 80, 80);
+  stroke-linecap: round;
+  stroke-width: 0.13rem;
 }
 
 .tick line {
-    stroke: rgb(80,80,80);
-    stroke-linecap: round;
+  stroke: rgb(80, 80, 80);
+  stroke-linecap: round;
 }
