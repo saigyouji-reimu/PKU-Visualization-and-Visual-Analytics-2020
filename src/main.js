@@ -73,7 +73,13 @@ let year_choiceItem =
   '<option value="2017" selected="selected">2017</option>' +
   '<option value="2018">2018</option>' +
   '<option value="2019">2019</option>' +
-  '<option value="2020">2020</option>';
+    '<option value="2020">2020</option>';
+
+let q2 = new Array();
+let data1 = {
+    fieldNames: ['3PA%', 'ORB%', 'FT%', 'AST%', 'DRtg', 'ORtg'],
+    values: [],
+};
 function get_min_max(data, attr) {
   let min = 1e9;
   let max = 0;
@@ -349,21 +355,36 @@ function draw_main() {
         .style('left', x(parseFloat(d[x_attr + year])) + 5 + 'px')
         .style('top', y(parseFloat(d[y_attr + year])) + 5 + 'px')
         //.transition().duration(500)
-        .style('visibility', 'visible');
-       let p1 = parseFloat(d['3PA ' + year]) / parseFloat(d['FGA ' + year]);
-      if (isNaN(p1)) p1 = 0;
-        let p2 = parseFloat(d['ORB ' + year])/parseFloat(d['TRB ' + year]);
-      if (isNaN(p2)) p2 = 0;
-      let p3 = parseFloat(d['FT% ' + year]);
-      if (isNaN(parseFloat(d['FT% ' + year]))) p3 = 0;
-        let p4 = parseFloat(d['AST ' + year]) /((parseFloat(d['TOV ' + year])+parseFloat(d['AST ' + year])));
-      if (isNaN(p4)) p4 = 0;
-      let p5 = parseFloat(d['DRtg ' + year])/150;
-      if (isNaN(parseFloat(d['DRtg ' + year]))) p5 = 0;
-      let p6 = parseFloat(d['ORtg ' + year]) / 150;
-      if (isNaN(parseFloat(d['ORtg ' + year]))) p6 = 0;
-      radar(p1, p2, p3, p4, p5, p6);
+          .style('visibility', 'visible');
+        
+
+   
     })
+      .on('click', (e, d) => {
+          let q1 = new Array();
+          
+          let Player1 = d['Player'];
+          q2.push(Player1);
+          let p1 = parseFloat(d['3PA ' + year]) / parseFloat(d['FGA ' + year]);
+          if (isNaN(p1)) p1 = 0;
+          let p2 = parseFloat(d['ORB ' + year]) / parseFloat(d['TRB ' + year]);
+          if (isNaN(p2)) p2 = 0;
+          let p3 = parseFloat(d['FT% ' + year]);
+          if (isNaN(parseFloat(d['FT% ' + year]))) p3 = 0;
+          let p4 = parseFloat(d['AST ' + year]) / ((parseFloat(d['TOV ' + year]) + parseFloat(d['AST ' + year])));
+          if (isNaN(p4)) p4 = 0;
+          let p5 = parseFloat(d['DRtg ' + year]) / 150;
+          if (isNaN(parseFloat(d['DRtg ' + year]))) p5 = 0;
+          let p6 = parseFloat(d['ORtg ' + year]) / 150;
+          if (isNaN(parseFloat(d['ORtg ' + year]))) p6 = 0;
+          q1.push(p1);
+          q1.push(p2);
+          q1.push(p3);
+          q1.push(p4);
+          q1.push(p5);
+          q1.push(p6);
+          radar(q1,q2);
+      })
     .on('mouseout', (e, d) => {
       // remove tooltip
       let tooltip = d3.select('#tooltip');
@@ -371,7 +392,14 @@ function draw_main() {
     });
 }
 
-function radar(a1, a2, a3, a4, a5, a6) {
+
+function radar(a1, a2) {
+    let padding = {
+        left: 0.2 * width,
+        bottom: 0.1 * height,
+        top: 0.2 * height,
+        right: 0.1 * width,
+    };
   const [width1, height1] = getActualDim('#container3');
   // 创建一个分组用来组合要画的图表元素
   let main1 = d3
@@ -382,10 +410,7 @@ function radar(a1, a2, a3, a4, a5, a6) {
     .classed('main1', true);
   main1.selectAll('g').remove();
     // .attr('transform', 'translate(' + width1 / 2 + ',' + height1 / 2 + ')');
-  let data1 = {
-    fieldNames: ['3PA%', 'ORB%', 'FT%', 'AST%', 'DRtg', 'ORtg'],
-    values: [[a1, a2, a3, a4, a5, a6]],
-  };
+    data1.values.push(a1);
   let radius = Math.min(width1, height1) / 3,
     // 指标的个数，即fieldNames的长度
     total = 6,
@@ -447,7 +472,14 @@ function radar(a1, a2, a3, a4, a5, a6) {
       return d.y;
     })
     .style('stroke', 'black');
-
+    let x = d3
+        .scaleLinear()
+        .domain([0,1])
+        .range([padding.left, width - padding.right]);
+    let y = d3
+        .scaleLinear()
+        .domain([0,1])
+        .range([height - padding.bottom, padding.top]);
   // 计算雷达图表的坐标
   let areasData = [];
   let values = data1.values;
@@ -480,10 +512,19 @@ function radar(a1, a2, a3, a4, a5, a6) {
     .append('g')
     .attr('class', function (d, i) {
       return 'area' + (i + 1);
-    });
+    })
+      .on('click', (e, d) => {
+          data1 = {
+              fieldNames: ['3PA%', 'ORB%', 'FT%', 'AST%', 'DRtg', 'ORtg'],
+              values: [],
+          };
+          let r1 = [];
+          let r2 = '';
+          radar(r1,r2);
+      });
   for (let i = 0; i < areasData.length; i++) {
     // 依次循环每个雷达图区域
-    let area = areas.select('.area' + (i + 1)),
+    var area = areas.select('.area' + (i + 1)),
       areaData = areasData[i];
     // 绘制雷达图区域下的多边形
     area
@@ -496,30 +537,59 @@ function radar(a1, a2, a3, a4, a5, a6) {
         return getColor(i);
       })
       .style('fill-opacity', 0.3)
-      .style('stroke - width', 3);
+        .style('stroke - width', 3);
 
     // 绘制雷达图区域下的点
-    let circles = area.append('g').classed('circles', true);
-    circles
-      .selectAll('circle')
-      .data(areaData.points)
-      .enter()
-      .append('circle')
-      .attr('cx', function (d) {
-        return d.x;
-      })
-      .attr('cy', function (d) {
-        return d.y;
-      })
-      .attr('r', 3)
-      .attr('stroke', function (d, index) {
-        return getColor(i);
-      })
-      .style('fill', 'white')
-      .style('stroke - width', 3);
+    var circles = area.append('g').classed('circles', true);
+      circles
+          .selectAll('circle')
+          .data(areaData.points)
+          .enter()
+          .append('circle')
+          .attr('cx', function (d) {
+              return d.x;
+          })
+          .attr('cy', function (d) {
+              return d.y;
+          })
+          .attr('r', 3)
+          .attr('stroke', function (d, index) {
+              return getColor(i);
+          })
+          .style('fill', 'white')
+          .style('stroke - width', 3)
+          .on('mouseover', (e, d) => {
+              //console.log('e', e, 'd', d)
+
+              // show a tooltip
+              
+
+              let content =
+                  '<table><tr><td>Name</td><td>' +
+                  a2[i] +
+                  '</td></tr>' ;
+
+              // tooltip
+              let tooltip = d3.select('#tooltip');
+              tooltip
+                  .html(content)
+                  .style('left', 1300 + 'px')
+                  .style('top', 150 + 'px')
+                  //.transition().duration(500)
+                  .style('visibility', 'visible');
+
+
+
+          })
+          .on('mouseout', (e, d) => {
+              // remove tooltip
+              let tooltip = d3.select('#tooltip');
+              tooltip.style('visibility', 'hidden');
+          })
+          ;
   }
   let textPoints = [];
-  let textRadius = radius + 20;
+ var textRadius = radius + 20;
   for (let i = 0; i < total; i++) {
     let x = textRadius * Math.sin(i * onePiece) + 0.5 * width1,
       y = textRadius * Math.cos(i * onePiece) + 0.5 * height1;
