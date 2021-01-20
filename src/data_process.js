@@ -104,7 +104,7 @@ function dict_to_list_team(data) {
     return new_data;
 }
 
-function dict_to_list_player(data) {
+function dict_to_list_player(data) { 
     var new_data = data;
     return new_data;
 }
@@ -125,7 +125,6 @@ function makeAssignments(data, means) {
             }
             distances[j] = Math.sqrt(sum);
         }
-        
         assignments.push(distances.indexOf(Math.min.apply(null, distances)));
     }
 
@@ -193,7 +192,7 @@ function kmeans(ori_data, k, mode, max_iter=1000) {
     }*/
     for(var i = 0; i < k; i++)
         means.push(data[i]);
-    
+
     for (var i=0; i<max_iter; i++) {
         var assignments = makeAssignments(data, means);
         var optimized = moveMeans(data, means, assignments);
