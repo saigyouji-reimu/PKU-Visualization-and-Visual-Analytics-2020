@@ -86,14 +86,14 @@ BarChart.prototype.draw = function (data, seasons) {
         (exit) =>
           exit.attr('fill', invalid_color).call((exit) =>
             exit
-              .transition(getTransition())
+              .transition()
               .attr('width', (d) => 0)
               .remove(),
           ),
       );
     console.log(rect);
     rect
-      .transition(getTransition())
+      .transition()
       .attr('x', (d) => x(d.name) + 5)
       .attr('width', (d) => x.bandwidth() - 10);
   }
