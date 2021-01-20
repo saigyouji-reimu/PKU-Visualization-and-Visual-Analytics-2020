@@ -287,7 +287,6 @@ Parallel.prototype.change_years = function(data, years, attr){
 
         set_function(i);
     });
-    d3.select('text').text('flag');
 }
 
 Parallel.prototype.disappear = function(){
