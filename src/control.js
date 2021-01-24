@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { main, q2 } from './main';
+import { main } from './main';
 import { pmain } from './index_';
 import { SingleButton } from './singlebutton';
 import { getActualDim } from "./utils";
