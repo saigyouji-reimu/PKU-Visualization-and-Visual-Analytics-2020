@@ -17,7 +17,6 @@ team.style('visibility', 'hidden');
 d3.select('#mode')
   .attr('width', 0.05 * width)
   .attr('height', 0.03 * height)
-  .attr('transform', 'translate(' + 0 + ',' + 0.005 * height + ')');
 let mode = new SingleButton('#mode', ['player', 'team']);
 mode.draw_rect();
 mode.set_listener(() => {

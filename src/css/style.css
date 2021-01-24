@@ -46,11 +46,22 @@ header {
 
 #team {
   top: 10%;
+  height: 100%;
 }
 
 #container3 svg {
   width: 100%;
   height: 100%;
+}
+
+#button {
+  width: 5%;
+  height: 10%;
+  overflow: hidden;
+  float: left;
+  left: 0%;
+  top: 100%;
+  position: absolute;
 }
 
 html,
