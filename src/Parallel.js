@@ -39,6 +39,7 @@ let LineData = new Array();
 let Linedata = new Array();
 let block = new Array();
 let ave_d = new Array(), ori_d = new Array();
+let pos = new Array();
 let A;
 
 let dur = 1000;
@@ -51,11 +52,11 @@ function Parallel(selector){
 
 
 let Text;
-function show_up(i){
+function show_up(i, a){
     let d = team[i];
     Text = svg.append('text')
         .text(d)
-        .attr("transform", "translate(" + LineData[L - 1].x + "," + LineData[L - 1].y + ")");
+        .attr("transform", "translate(" + LineData[L - 1].x + "," + a + ")");
 
     LineGraph[i].attr('opacity', 0.9)
         .attr("stroke-width", 9);
@@ -83,9 +84,9 @@ function show_down(i){
     tooltip.style('visibility', 'hidden');
 }
 
-function set_function(i){
+function set_function(i, a){
     LineGraph[i].on('mouseover', (e, _d) => {
-        show_up(i);
+        show_up(i, a);
     })
     .on('mouseout', (e, d) => {
         show_down(i);
@@ -99,7 +100,7 @@ function set_function(i){
                     .attr("stroke-width", 6);
             }
         })
-        show_up(i);
+        show_up(i, a);
     })
     .on('mouseout', (e, d) => {
         show_down(i);
@@ -109,6 +110,24 @@ function set_function(i){
                 .attr("stroke-width", 4);  
         })
     })
+}
+
+function bsort(){
+    let sum = new Array();
+    pos = new Array();
+    A.forEach((d, i) => {
+        sum[d] = 0;
+    });
+    A.forEach((d, i) => {
+        sum[d]++;
+    });
+    sum.forEach((d, i) => {
+        if(i) sum[i] += sum[i - 1];
+    })
+    
+    A.forEach((d, i) => {
+        pos[i] = --sum[A[i]];
+    });
 }
 
 Parallel.prototype.draw = function(data, years, attr){
@@ -138,6 +157,7 @@ Parallel.prototype.draw = function(data, years, attr){
     });
 
     A = kmeans(ori_d, 7, 'team');
+    bsort();
     
     L = attr.length;
     let delta = width * 0.8 / L;
@@ -209,7 +229,7 @@ Parallel.prototype.draw = function(data, years, attr){
         block[i] = svg.append("g")
             .attr("transform", "translate(" + (width * 0.83) + "," + dheight + ")");
         
-        set_function(i);
+        set_function(i, (dheight) + Scale[L-1](ave_d[i][attr[L-1]]));
         
         RectGraph[i] = block[i].append("rect")
             .attr("x", 0)
@@ -227,7 +247,7 @@ Parallel.prototype.draw = function(data, years, attr){
         
         block[i].transition()
             .duration(dur)
-            .attr("transform", "translate(" + (width * 0.83) + "," + (dheight + i * 20) + ")")
+            .attr("transform", "translate(" + (width * 0.83) + "," + (dheight + pos[i] * 20) + ")")
     });
     /*svg.selectAll('text')
         .data(team)*/
@@ -236,7 +256,7 @@ Parallel.prototype.draw = function(data, years, attr){
 
 Parallel.prototype.change_years = function(data, years, attr){
     data = data.filter((d, i) => (years.includes(d["Season"])));
-    let ave_d = new Array(), ori_d = new Array();
+    ave_d = new Array(), ori_d = new Array();
     team.forEach((d, i) => {
         ave_d[i] = {};
         ori_d[i] = [];
@@ -252,6 +272,7 @@ Parallel.prototype.change_years = function(data, years, attr){
     });
 
     A = kmeans(ori_d, 7, 'team');
+    bsort();
     
     let L = attr.length;
     let delta = width * 0.8 / L;
@@ -285,7 +306,11 @@ Parallel.prototype.change_years = function(data, years, attr){
             .duration(dur)
             .attr('fill', color[A[i]]);
 
-        set_function(i);
+        block[i].transition()
+            .duration(dur)
+            .attr("transform", "translate(" + (width * 0.83) + "," + (dheight + pos[i] * 20) + ")")
+
+        set_function(i, (dheight) + Scale[L-1](ave_d[i][attr[L-1]]));
     });
 }
 
