@@ -31,11 +31,10 @@ function countDistinct(data, attr) {
   return ret;
 }
 
-function get_team(data){
+function get_team(data) {
   let map = [];
-  data.forEach(d => {
-    if(!map.includes(d['Team']))
-      map.push(d['Team']);
+  data.forEach((d) => {
+    if (!map.includes(d['Team'])) map.push(d['Team']);
   });
   return map;
 }
